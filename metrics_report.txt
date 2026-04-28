@@ -1,0 +1,48 @@
+Food Quality Assessment System — Evaluation Metrics
+============================================================
+
+Dataset: C:\Users\JANARDHAM\Desktop\16\project dataset_cleaned
+Total Images: 3500 | Test Set: 525
+Classes: 7 - Damaged, Dried, Fresh, Old, Ripe, Rotten, Unripe
+Best Validation Accuracy: 96.19%
+
+============================================================
+  OVERALL METRICS
+============================================================
+  Test Accuracy      : 94.48%
+  Precision (Macro)  : 94.67%
+  Recall (Macro)     : 95.91%
+  F1-Score (Macro)   : 95.24%
+  Precision (Wtd)    : 94.53%
+  Recall (Wtd)       : 94.48%
+  F1-Score (Wtd)     : 94.45%
+
+============================================================
+  PER-CLASS METRICS
+============================================================
+  Class          Precision      Recall    F1-Score
+  ----------------------------------------------
+  Damaged           87.50%      96.55%      91.80%
+  Dried            100.00%     100.00%     100.00%
+  Fresh             91.89%      94.44%      93.15%
+  Old               98.51%      98.51%      98.51%
+  Ripe              95.00%      96.61%      95.80%
+  Rotten            94.07%      87.40%      90.61%
+  Unripe            95.74%      97.83%      96.77%
+
+============================================================
+  CLASSIFICATION REPORT
+============================================================
+              precision    recall  f1-score   support
+
+     Damaged     0.8750    0.9655    0.9180        29
+       Dried     1.0000    1.0000    1.0000        53
+       Fresh     0.9189    0.9444    0.9315       144
+         Old     0.9851    0.9851    0.9851        67
+        Ripe     0.9500    0.9661    0.9580        59
+      Rotten     0.9407    0.8740    0.9061       127
+      Unripe     0.9574    0.9783    0.9677        46
+
+    accuracy                         0.9448       525
+   macro avg     0.9467    0.9591    0.9524       525
+weighted avg     0.9453    0.9448    0.9445       525

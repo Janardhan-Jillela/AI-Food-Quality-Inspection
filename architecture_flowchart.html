@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>System Architecture Flowchart</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+  h1 { font-size: 18px; font-weight: 700; color: #2c2c2c; margin-bottom: 4px; text-align: center; }
+  .sub { font-size: 12px; color: #999; margin-bottom: 28px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>🍎 Food Quality Inspection System — Architecture</h1>
+<div class="sub">Deep Learning · Computer Vision · Real-Time Analysis</div>
+
+<!--
+  LAYOUT (all coordinates)
+  Top row   center-y = 117  (boxes y=85–150)
+  Fallback  center-y = 232  (box  y=200–265)
+  Bottom row center-y = 322  (boxes y=290–355)
+
+  BOX POSITIONS (x, y, w, h):
+  1. Input Image          : 20,  85, 120, 65
+  2. Object Detection     : 180, 85, 135, 65  right=315
+  3. Diamond              : center 385,117  hw=42 hh=30  points(343,117)(385,87)(427,117)(385,147)
+  4. Crop Extraction      : 457, 85, 125, 65  right=582
+  5. Species ID           : 622, 85, 135, 65  right=757
+  6. Quality Class.       : 797, 85, 145, 65  right=942
+  7. Results Dashboard    : 965, 5,  120,115  right=1085
+  8. Decision Layer       : 182, 290, 135, 65  right=317
+  9. Trend Analysis       : 368, 290, 135, 65  right=503
+  10. Defect Detection    : 554, 290, 140, 65  right=694
+  11. Fallback            : 318, 200, 135, 65  right=453
+
+  ARROW ROUTES (no crossings):
+  1→2  : straight right
+  2→◇  : straight right
+  ◇YS→4 : straight right, label "Yes"
+  ◇NO→11: straight down, label "No"
+  11→4  : (453,232)→(519,232)→(519,150)  dashed, enters bottom of Crop
+  4→5   : straight right
+  5→6   : straight right
+  6→7   : (942,117)→(965,117)  right into left of Results
+  6→10  : (869,150)→(869,192)→(624,192)→(624,290)
+            horizontal at y=192 is ABOVE Fallback(y=200) ✓
+  10→9  : (554,322)←(503,322) leftward
+  9→8   : (368,322)←(317,322) leftward
+  8→7   : (182,322)→(10,322)→(10,45)→(965,45)
+            vertical at x=10, left of all boxes (InputImage x=20) ✓
+            horizontal at y=45, above all boxes (top row y=85) ✓
+            enters left of Results at (965,45) ✓
+-->
+
+<svg viewBox="0 0 1100 425" xmlns="http://www.w3.org/2000/svg"
+     style="width:100%;max-width:1100px;display:block;">
+
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#c0392b"/>
+    </marker>
+  </defs>
+
+  <!-- ══════════════ BOXES ══════════════ -->
+
+  <!-- 1. Input Image -->
+  <rect x="20" y="85" width="120" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="80" y="108" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Input Image</text>
+  <text x="80" y="124" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Upload / Webcam</text>
+  <text x="80" y="139" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">/ URL</text>
+
+  <!-- 2. Object Detection -->
+  <rect x="180" y="85" width="135" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="247" y="108" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Object Detection</text>
+  <text x="247" y="124" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">YOLO-World</text>
+  <text x="247" y="139" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">/ YOLOv9</text>
+
+  <!-- 3. Decision Diamond -->
+  <polygon points="343,117 385,87 427,117 385,147"
+           fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="385" y="113" font-family="Inter" font-size="11" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Detections</text>
+  <text x="385" y="127" font-family="Inter" font-size="11" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">?</text>
+
+  <!-- 4. Crop Extraction -->
+  <rect x="457" y="85" width="125" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="519" y="108" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Crop Extraction</text>
+  <text x="519" y="124" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Bounding Box</text>
+  <text x="519" y="139" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">ROI Crop</text>
+
+  <!-- 5. Species Identification -->
+  <rect x="622" y="85" width="135" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="689" y="108" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Species Identification</text>
+  <text x="689" y="124" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">MobileNetV2</text>
+  <text x="689" y="139" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">36 Classes</text>
+
+  <!-- 6. Quality Classification -->
+  <rect x="797" y="85" width="145" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="869" y="108" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Quality Classification</text>
+  <text x="869" y="124" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">ResNet50</text>
+  <text x="869" y="139" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">7 Quality Classes</text>
+
+  <!-- 7. Results Dashboard (top-right) -->
+  <rect x="965" y="5" width="120" height="115" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="1025" y="27" font-family="Inter" font-size="12" font-weight="700"
+        fill="#3a2e1e" text-anchor="middle">Results Dashboard</text>
+  <text x="1025" y="46" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Annotated Image</text>
+  <text x="1025" y="62" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Quality Score</text>
+  <text x="1025" y="78" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Defect Map</text>
+  <text x="1025" y="94" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Trend Chart</text>
+  <text x="1025" y="110" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Species Name</text>
+
+  <!-- 8. Decision Layer -->
+  <rect x="182" y="290" width="135" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="249" y="313" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Decision Layer</text>
+  <text x="249" y="329" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Quality Score</text>
+  <text x="249" y="344" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Majority Voting</text>
+
+  <!-- 9. Trend Analysis -->
+  <rect x="368" y="290" width="135" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="435" y="313" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Trend Analysis</text>
+  <text x="435" y="329" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">LSTM</text>
+  <text x="435" y="344" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Window = 10 frames</text>
+
+  <!-- 10. Defect Detection -->
+  <rect x="554" y="290" width="140" height="65" rx="10"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="624" y="313" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Defect Detection</text>
+  <text x="624" y="329" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">OpenCV HSV / LAB</text>
+  <text x="624" y="344" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Color Analysis</text>
+
+  <!-- 11. Fallback Analysis (dashed border) -->
+  <rect x="318" y="200" width="135" height="65" rx="10"
+        fill="#fdf3e3" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="385" y="222" font-family="Inter" font-size="12" font-weight="600"
+        fill="#3a2e1e" text-anchor="middle">Fallback Analysis</text>
+  <text x="385" y="238" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">Full Frame</text>
+  <text x="385" y="253" font-family="Inter" font-size="10"
+        fill="#7a6040" text-anchor="middle">/ Custom YOLOv9</text>
+
+
+  <!-- ══════════════ ARROWS (clean, no crossings) ══════════════ -->
+
+  <!-- 1 → 2: Input → Object Detection -->
+  <line x1="140" y1="117" x2="179" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 2 → Diamond: Object Detection → Detections? -->
+  <line x1="315" y1="117" x2="342" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- Diamond YES → 4: Crop Extraction -->
+  <line x1="427" y1="117" x2="456" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+  <text x="432" y="109" font-family="Inter" font-size="11" font-weight="600" fill="#c0392b">Yes</text>
+
+  <!-- Diamond NO ↓ → 11: Fallback Analysis -->
+  <line x1="385" y1="147" x2="385" y2="199"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+  <text x="390" y="175" font-family="Inter" font-size="11" font-weight="600" fill="#c0392b">No</text>
+
+  <!-- 11 → 4: Fallback → Crop Extraction (dashed)
+       Route: right of Fallback(453,232) → right to x=519 → up to bottom of Crop(519,150)
+       x=519 is center of Crop, y=150 is bottom of Crop box. No box crossing. -->
+  <polyline points="453,232 519,232 519,150"
+            fill="none" stroke="#c0392b" stroke-width="1.8"
+            stroke-dasharray="6,3" marker-end="url(#ah)"/>
+
+  <!-- 4 → 5: Crop Extraction → Species ID -->
+  <line x1="582" y1="117" x2="621" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 5 → 6: Species ID → Quality Classification -->
+  <line x1="757" y1="117" x2="796" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 6 → 7: Quality → Results Dashboard
+       Route: right of Quality(942,117) → enters left of Results(965,117)
+       y=117 is within Results box (y=5–120). Clean horizontal. -->
+  <line x1="942" y1="117" x2="964" y2="117"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 6 → 10: Quality → Defect Detection
+       Route: bottom of Quality(869,150) → down to y=192 → left to x=624 → down to top of Defect(624,290)
+       Horizontal at y=192 is ABOVE Fallback box (y=200). No crossing. -->
+  <polyline points="869,150 869,192 624,192 624,289"
+            fill="none" stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 10 → 9: Defect → Trend Analysis (leftward) -->
+  <line x1="554" y1="322" x2="504" y2="322"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 9 → 8: Trend → Decision Layer (leftward) -->
+  <line x1="368" y1="322" x2="318" y2="322"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- 8 → 7: Decision Layer → Results Dashboard
+       Route: left of Decision(182,322) → far left x=10 → up to y=45 → right to Results left(965,45)
+       x=10  : left of Input Image (x=20). No crossing.
+       y=45  : above all top-row boxes (y=85). No crossing.
+       Enters Results left edge at y=45 (Results is y=5–120). Clean. -->
+  <polyline points="182,322 10,322 10,45 964,45"
+            fill="none" stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+
+
+  <!-- ══════════════ LEGEND ══════════════ -->
+  <line x1="25" y1="400" x2="65" y2="400"
+        stroke="#c0392b" stroke-width="1.8" marker-end="url(#ah)"/>
+  <text x="72" y="404" font-family="Inter" font-size="11" fill="#666">Main Flow</text>
+
+  <line x1="168" y1="400" x2="208" y2="400"
+        stroke="#c0392b" stroke-width="1.8" stroke-dasharray="6,3" marker-end="url(#ah)"/>
+  <text x="215" y="404" font-family="Inter" font-size="11" fill="#666">Fallback Path</text>
+
+  <rect x="320" y="393" width="14" height="14" rx="3"
+        fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="340" y="404" font-family="Inter" font-size="11" fill="#666">Processing Block</text>
+
+  <polygon points="455,393 470,400 455,407 440,400"
+           fill="#f5e6c8" stroke="#c9a96e" stroke-width="1.5"/>
+  <text x="476" y="404" font-family="Inter" font-size="11" fill="#666">Decision Point</text>
+
+</svg>
+
+</body>
+</html>
