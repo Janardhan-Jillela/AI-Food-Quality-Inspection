@@ -1,119 +1,168 @@
-# AI-Powered Food Quality Inspection & Freshness Assessment System
+<div align="center">
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange?style=flat-square&logo=pytorch)](https://pytorch.org/)
-[![YOLO](https://img.shields.io/badge/YOLO-Ultralytics-purple?style=flat-square)](https://github.com/ultralytics/ultralytics)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-red?style=flat-square&logo=streamlit)](https://streamlit.io/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-green?style=flat-square&logo=opencv)](https://opencv.org/)
-[![Accuracy](https://img.shields.io/badge/Test%20Accuracy-94.48%25-brightgreen?style=flat-square)](#evaluation--benchmarks)
+# AI Food Quality Inspection & Freshness Assessment System
+### Automated Multi-Stage Deep Learning Pipeline for Agricultural Defect Localization, Species Identification, and Degradation Forecasting
 
-An end-to-end computer vision and deep learning system that automates agricultural produce grading, defect detection, species identification, and degradation forecasting across images and video streams.
+[![Python](https://img.shields.io/badge/Python-3.8%2B-102A24?style=for-the-badge&logo=python&logoColor=34D399)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-102A24?style=for-the-badge&logo=pytorch&logoColor=16A34A)](https://pytorch.org/)
+[![YOLO](https://img.shields.io/badge/YOLO-v8_/_v9-102A24?style=for-the-badge&logo=yolo&logoColor=34D399)](https://github.com/ultralytics/ultralytics)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-102A24?style=for-the-badge&logo=opencv&logoColor=16A34A)](https://opencv.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-102A24?style=for-the-badge&logo=streamlit&logoColor=34D399)](https://streamlit.io/)
+[![Validation Accuracy](https://img.shields.io/badge/Val_Accuracy-96.19%25-22C55E?style=for-the-badge&logoColor=white)](#model-evaluation--benchmarks)
+[![Test Accuracy](https://img.shields.io/badge/Test_Accuracy-94.48%25-16A34A?style=for-the-badge&logoColor=white)](#model-evaluation--benchmarks)
+
+<br/>
+
+[![Computer Vision](https://img.shields.io/badge/Skill-Computer_Vision-102A24?style=flat-square&logoColor=34D399)](https://github.com/Janardhan-Jillela)
+[![Transfer Learning](https://img.shields.io/badge/Skill-ResNet50_Transfer_Learning-16A34A?style=flat-square&logoColor=white)](https://github.com/Janardhan-Jillela)
+[![Produce Taxonomy](https://img.shields.io/badge/Skill-MobileNetV2_Taxonomy-102A24?style=flat-square&logoColor=34D399)](https://github.com/Janardhan-Jillela)
+[![Temporal Modeling](https://img.shields.io/badge/Skill-Bi--LSTM_Trend_Forecasting-16A34A?style=flat-square&logoColor=white)](https://github.com/Janardhan-Jillela)
+[![Color Space Defect Segmentation](https://img.shields.io/badge/Skill-HSV_/_LAB_Color_Segmentation-102A24?style=flat-square&logoColor=34D399)](https://github.com/Janardhan-Jillela)
+
+</div>
 
 ---
 
 ## Executive Summary
 
-- **Multi-Stage AI Architecture**: Combines **YOLO** (object localization), **ResNet-50** (7-tier quality classification), **MobileNetV2** (36-species recognition), **OpenCV** (pixel-level defect segmentation), and a **Bi-LSTM** (temporal shelf-life trend forecasting).
-- **High-Accuracy Benchmarks**: Achieved **94.48% test accuracy** and a **95.24% macro F1-score** across 3,500 standardized produce images, with a peak validation accuracy of **96.19%**.
-- **Automated Defect Quantification**: Isolates surface bruises, rot, dehydration, and discoloration, computing exact surface defect area percentages and severity tiers (Low, Medium, High).
-- **Interactive Decision Dashboard**: Deploys an intuitive Streamlit interface featuring live inspection telemetry, 0–6 quality scoring, temporal degradation graphs, and instant reporting.
+- **Multi-Stage AI Architecture**: Integrates **Ultralytics YOLO** (spatial localization), **ResNet-50** (7-tier quality classification), **MobileNetV2** (36-species produce recognition), **OpenCV HSV/LAB** (sub-surface defect segmentation), and a **Bi-LSTM** (temporal deterioration forecasting).
+- **Verified Empirical Benchmarks**: Attained **94.48% test accuracy** and a **95.24% macro F1-score** across 3,500 standardized agricultural images, peaking at **96.19% validation accuracy**.
+- **Automated Defect Quantification**: Computes precise surface damage percentage and categorizes severity tiers (Low, Medium, High) for bruises, rot, fungal decay, dehydration, and aging spots.
+- **Enterprise FoodTech Dashboard**: Deploys an interactive Streamlit application with 0–6 quality index scoring, live Plotly deterioration trend charts, dynamic confidence calibration, and exportable audit reports.
 
 ---
 
-## Problem & Business Impact
+## Business Impact & Problem Statement
 
-Manual agricultural quality inspection is labor-intensive, subjective, and prone to human inconsistency, causing substantial commercial losses across cold chains, grocery retail, and food processing facilities. 
+Manual food inspection across packaging hubs, cold storage facilities, and retail distribution centers is fundamentally bottlenecked by human subjectivity, fatigue, and inconsistent grading standards. These inefficiencies result in late spoilage detection, high food waste rates, and commercial margin loss.
 
-This system automates food quality triage by standardizing inspection into objective, auditable metrics. By combining spatial defect detection with temporal deterioration forecasting, supply chain operators can identify spoiled batches earlier, reduce food waste, and automate sorting at scale.
+The **AI Food Quality Inspection System** resolves these challenges by converting subjective sensory inspection into reproducible, quantified data:
+1. **Automated Triage**: Rapidly screens incoming bulk produce to separate prime inventory from pre-rot batches.
+2. **Defect Early-Warning**: Flags subtle color deviations and dehydration before visible decay compromises whole storage crates.
+3. **Traceability**: Generates objective quality audit trails with standardized metrics for supplier accountability.
 
 ---
 
-## Core Architecture & Pipeline
+## System Architecture & Pipeline
 
 ```mermaid
 flowchart LR
-    A["Input Media<br/>(Image / Stream)"] --> B["Produce Localization<br/>(YOLO Detector)"]
-    B --> C["Species Identification<br/>(MobileNetV2 · 36 Classes)"]
-    C --> D["Quality Grading<br/>(ResNet-50 · 7 Quality Tiers)"]
-    D --> E["Defect & Trend Analysis<br/>(OpenCV HSV/LAB + Bi-LSTM)"]
-    E --> F["Operational Dashboard<br/>(Score 0–6 · Actionable Report)"]
+    classDef forest fill:#102A24,stroke:#34D399,stroke-width:2px,color:#FAFAF0;
+    classDef emerald fill:#16A34A,stroke:#34D399,stroke-width:2px,color:#FFFFFF;
+    classDef mint fill:#34D399,stroke:#102A24,stroke-width:2px,color:#102A24;
+    classDef dark fill:#292524,stroke:#16A34A,stroke-width:2px,color:#FAFAF0;
+
+    In["Input Stream<br/>(Upload / Web / Stream)"]:::dark --> Loc["1. Produce Localization<br/>(YOLO-World / YOLOv9)"]:::emerald
+    Loc --> Spec["2. Taxonomy Classification<br/>(MobileNetV2 · 36 Species)"]:::forest
+    Spec --> Qual["3. Quality Grading<br/>(ResNet-50 · 7 Quality Tiers)"]:::emerald
+    Qual --> Def["4. Defect & Trend Engine<br/>(OpenCV LAB/HSV + Bi-LSTM)"]:::forest
+    Def --> Out["5. Decision Dashboard<br/>(Score 0–6 · Telemetry)"]:::mint
 ```
 
-1. **Produce Localization (YOLO)**: Detects and isolates agricultural produce targets from cluttered visual backgrounds.
-2. **Species Identification (MobileNetV2)**: Classifies the specific fruit or vegetable across 36 fine-grained categories with **91.36% test accuracy**.
-3. **Quality Grading (ResNet-50)**: Extracts deep visual representations to categorize freshness into seven distinct quality tiers.
-4. **Defect Segmentation (OpenCV)**: Analyzes HSV and LAB color channels and edge contours to segment damaged tissue, quantify defect area percentage, and assign severity.
-5. **Deterioration Forecasting (Bi-LSTM)**: Analyzes sequential quality ratings over a 10-frame sliding window to predict whether produce is *Improving*, *Stable*, or *Degrading*.
-6. **Unified Decision UI (Streamlit)**: Translates multi-model outputs into a standardized 0–6 quality score, interactive trend visualizations, and downloadable audit logs.
+### Pipeline Execution Stages
+
+1. **Produce Localization (YOLO)**: Isolates fruits and vegetables from complex industrial conveyor or kitchen backgrounds, generating tight region-of-interest (ROI) crops.
+2. **Species Identification (MobileNetV2)**: Classifies the specific commodity across 36 parent species (fruits and vegetables) with **91.36% test accuracy**.
+3. **Quality Grading (ResNet-50)**: Analyzes multi-layer spatial embeddings to classify the specimen into one of seven standard freshness tiers.
+4. **Defect Segmentation (OpenCV)**: Evaluates luminance and chrominance shifts in **LAB** and **HSV** color spaces to segment surface damage, compute defect area percentages, and rank severity.
+5. **Deterioration Forecasting (Bi-LSTM)**: Models historical quality transitions across a 10-frame sliding window to predict stability direction (*Improving*, *Stable*, or *Degrading*).
+6. **Unified Decision Interface**: Visualizes output telemetry via a standardized 0–6 quality scale with actionable dispatch recommendations.
 
 ---
 
-## Evaluation & Benchmarks
+## Dataset & Technical Specifications
 
-The quality classification model was evaluated on a verified test set of 525 images (from a 3,500-image dataset) across seven operational condition classes:
-
-### Overall Performance
-
-| Metric | Score | Key Takeaway |
+| Parameter | Specification | Description |
 |---|---|---|
-| **Test Accuracy** | **94.48%** | Robust generalization on unseen visual samples |
-| **Best Validation Accuracy** | **96.19%** | High convergence during training |
-| **Macro Precision** | **94.67%** | Minimal false positive classification across classes |
-| **Macro Recall** | **95.91%** | Strong sensitivity in detecting damaged and deteriorating items |
-| **Macro F1-Score** | **95.24%** | Balanced harmonic precision-recall performance |
+| **Total Dataset Size** | 3,500 Images | Curated and standardized agricultural produce dataset |
+| **Test Set Split** | 525 Images (15%) | Strictly held-out test split for unbiased evaluation |
+| **Training / Validation** | 2,975 Images (85%) | Stratified split optimized with early stopping (patience: 7) |
+| **Input Tensor Resolution** | 224 x 224 x 3 | Normalized RGB tensors with ImageNet mean and variance |
+| **Produce Species** | 36 Classes | Apple, Banana, Bell Pepper, Carrot, Mango, Tomato, Watermelon, etc. |
+| **Freshness Classes** | 7 Quality Tiers | Fresh, Ripe, Unripe, Old, Dried, Damaged, Rotten |
 
-### Per-Class Quality Grading Breakdown
+---
 
-| Quality Class | Precision | Recall | F1-Score | Operational Severity / Action |
-|---|---|---|---|---|
-| **Dried** | 100.00% | 100.00% | **100.00%** | Dehydrated stock; discount or repurpose |
-| **Old** | 98.51% | 98.51% | **98.51%** | Past prime shelf-life; expedite distribution |
-| **Unripe** | 95.74% | 97.83% | **96.77%** | Pre-retail storage; route to ripening chambers |
-| **Ripe** | 95.00% | 96.61% | **95.80%** | Prime retail quality; ready for immediate sale |
-| **Fresh** | 91.89% | 94.44% | **93.15%** | Highest commercial grade (Score 6/6) |
-| **Damaged** | 87.50% | 96.55% | **91.80%** | Physical surface bruise/puncture; reject from premium |
-| **Rotten** | 94.07% | 87.40% | **90.61%** | Microbial rot/decay; immediate culling (Score 0/6) |
+## Model Evaluation & Benchmarks
+
+All evaluation figures represent empirical results recorded from the verified test dataset (`metrics_report.txt`):
+
+### Overall Test Metrics
+
+| Evaluation Metric | Macro Average | Weighted Average | Interpretation |
+|---|---|---|---|
+| **Test Accuracy** | **94.48%** | **94.48%** | Global multi-class prediction accuracy |
+| **Best Validation Accuracy** | **96.19%** | **96.19%** | Peak accuracy observed during validation |
+| **Precision** | **94.67%** | **94.53%** | Minimal false positive classification rate |
+| **Recall** | **95.91%** | **94.48%** | High sensitivity in catching spoiled and damaged produce |
+| **F1-Score** | **95.24%** | **94.45%** | Harmonic mean reflecting reliable balance |
+
+### Quality Classification Performance by Class
+
+The system assigns actionable status classifications mapped to industrial handling decisions:
+
+| Quality Class | Status Level | Score | Precision | Recall | F1-Score | Supply Chain Action |
+|---|---|---|---|---|---|---|
+| **Fresh** | `Good Quality` | 6 / 6 | 91.89% | 94.44% | **93.15%** | Premium retail distribution |
+| **Ripe** | `Good Quality` | 5 / 6 | 95.00% | 96.61% | **95.80%** | Immediate consumer sale |
+| **Unripe** | `Moderate Quality` | 4 / 6 | 95.74% | 97.83% | **96.77%** | Route to climate-controlled ripening storage |
+| **Old** | `Moderate Quality` | 3 / 6 | 98.51% | 98.51% | **98.51%** | Priority markdown or express inventory routing |
+| **Dried** | `Moderate Quality` | 2 / 6 | 100.00% | 100.00% | **100.00%** | Secondary food processing or dehydration stock |
+| **Damaged** | `Defective / Reject` | 1 / 6 | 87.50% | 96.55% | **91.80%** | Reject from fresh packs; inspect handling machinery |
+| **Rotten** | `Defective / Reject` | 0 / 6 | 94.07% | 87.40% | **90.61%** | Quarantine and discard; sanitize bin zone |
+
+---
+
+## Visual Evaluation & Model Performance Assets
+
+<div align="center">
+
+| Confusion Matrix & Separation | F1 vs. Confidence Curve |
+|:---:|:---:|
+| <img src="confusion_matrix.png" width="460" alt="Confusion Matrix"/> | <img src="f1_confidence_curve.png" width="460" alt="F1 Confidence Curve"/> |
+| *High diagonal density confirms robust class separation across all 7 grades.* | *Optimal F1-score equilibrium across decision confidence thresholds.* |
+
+| Precision vs. Confidence | Recall vs. Confidence |
+|:---:|:---:|
+| <img src="precision_confidence_curve.png" width="460" alt="Precision Curve"/> | <img src="recall_confidence_curve.png" width="460" alt="Recall Curve"/> |
+| *Precision stability across operational confidence thresholds.* | *High recall retention ensuring defective specimens are reliably captured.* |
+
+| Neural Temporal Forecasting (Bi-LSTM) | Object Localization Backbone (YOLO) |
+|:---:|:---:|
+| <img src="lstm_architecture.png" width="460" alt="Bi-LSTM Architecture"/> | <img src="yolov9_architecture.png" width="460" alt="YOLOv9 Architecture"/> |
+| *Bidirectional recurrent design modeling multi-frame degradation rates.* | *Dual-branch convolutional feature extractor for dense object localization.* |
+
+</div>
+
+---
+
+## Technical Highlights & Key Engineering Decisions
+
+1. **Dual-Model Decoupled Taxonomy**: Separating commodity species recognition (MobileNetV2, 36 classes) from condition grading (ResNet-50, 7 tiers) prevents combinatorial class explosion, allowing the quality grading model to generalize across new agricultural crops without full architectural retraining.
+2. **Multi-Space Color-Metric Defect Segmentation**: Pure RGB thresholding fails under industrial ambient lighting variations. The inspection pipeline transforms crops into **CIE LAB** (isolating dark rot anomalies) and **HSV** (detecting oxidation and bruising), paired with morphological opening/closing to filter sensor noise.
+3. **Temporal Trend Tracking**: Unlike single-frame classifiers that evaluate static instances in isolation, the integrated **Bi-LSTM** processes sequential 10-frame quality embeddings to establish whether degradation is accelerating, stable, or recovering.
+4. **Resource Caching & Low-Latency Execution**: Model weights are loaded once into persistent memory via Streamlit's `@st.cache_resource` decorator, executing inference exclusively within `torch.no_grad()` contexts to sustain real-time processing speeds.
 
 ---
 
 ## Technology Stack
 
-| Layer | Technologies | Functional Responsibility |
+| Layer | Technologies | Practical Role in System |
 |---|---|---|
-| **Deep Learning Framework** | PyTorch, TorchVision | Model training, transfer learning, and GPU/CPU tensor execution |
-| **Produce Localization** | Ultralytics YOLOv8 / YOLOv9 | Zero-shot open-vocabulary and pre-trained object localization |
-| **Feature Extraction & Quality** | ResNet-50 | Deep convolutional backbone fine-tuned for 7-class freshness grading |
-| **Species Classifier** | MobileNetV2 | Lightweight, low-latency 36-class produce taxonomy classifier |
-| **Temporal Forecasting** | Bi-LSTM (`TrendLSTM`) | Recurrent network modeling deterioration trends over sequential frames |
-| **Computer Vision** | OpenCV (cv2), NumPy | LAB/HSV color segmentation, morphological filtering, and contour mapping |
-| **Interactive Dashboard** | Streamlit, Plotly, Custom CSS | Production web UI, interactive Plotly charts, and telemetry cards |
+| **Core Language** | Python 3.8+ | Application architecture, inference orchestration, and data manipulation |
+| **Deep Learning Framework** | PyTorch, TorchVision | CNN backbones, fine-tuning, loss optimization, and GPU tensor pipelines |
+| **Produce Localization** | Ultralytics YOLOv8 / YOLOv9 | Real-time bounding box extraction and zero-shot open-vocabulary detection |
+| **Quality Feature Extraction** | ResNet-50 | Transfer-learning feature backbone delivering 2048-dim spatial embeddings |
+| **Produce Species Classifier** | MobileNetV2 | Lightweight 36-class classifier delivering 91.36% test accuracy |
+| **Temporal Sequence Model** | Bi-LSTM (`TrendLSTM`) | Recurrent model forecasting state trajectories over 10-frame sequence windows |
+| **Image Processing** | OpenCV (cv2), NumPy, Pillow | Multi-space color conversion, morphology, contour bounding, and tensor conversions |
+| **Web Dashboard & Reporting** | Streamlit, Plotly, HTML/CSS | Modern dark FoodTech interface, live analytics charts, and responsive UI cards |
 
 ---
 
-## Visual Evaluation
+## Installation & Quickstart
 
-| Confusion Matrix | F1 vs. Confidence Curve |
-|---|---|
-| ![Confusion Matrix](confusion_matrix.png)<br/>*Confusion matrix illustrating strong diagonal class separation across all 7 grades.* | ![F1 Curve](f1_confidence_curve.png)<br/>*Macro F1-score optimization across decision confidence thresholds.* |
-
-| Precision vs. Confidence | Recall vs. Confidence |
-|---|---|
-| ![Precision Curve](precision_confidence_curve.png)<br/>*Precision stability under operational detection thresholds.* | ![Recall Curve](recall_confidence_curve.png)<br/>*Recall retention demonstrating high capture rates for defective produce.* |
-
----
-
-## Technical Highlights & Engineering Decisions
-
-1. **Composite Color-Space Defect Segmentation**: Traditional RGB thresholding fails under natural lighting. The system utilizes combined **LAB** (luminance anomaly detection) and **HSV** (saturation/hue shifts) color models with morphological closing to reliably isolate bruising and fungal rot.
-2. **Hierarchical Two-Step Classification**: Separating produce identification (MobileNetV2) from quality condition grading (ResNet-50) allows the quality model to remain domain-agnostic and scalable across fruits and vegetables without retraining for every species.
-3. **Temporal Trend Modeling**: A single snapshot cannot capture deterioration dynamics. The integrated Bi-LSTM processes chronological quality state vectors, generating predictive warnings before visible decay spoils entire storage crates.
-4. **Optimized Inference Workflow**: Neural models are cached using Streamlit's `@st.cache_resource`, while forward passes run under `torch.no_grad()` to maintain low-latency inference on desktop and edge devices.
-
----
-
-## Quickstart
-
-### 1. Environment Setup
+### 1. Repository Setup
 ```bash
 git clone https://github.com/Janardhan-Jillela/AI-Food-Quality-Inspection.git
 cd AI-Food-Quality-Inspection
@@ -125,20 +174,20 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Install Dependencies
+### 2. Dependency Installation
 ```bash
 pip install torch torchvision opencv-python ultralytics streamlit numpy pillow plotly scikit-learn
 ```
 
-### 3. Run the Dashboard
+### 3. Launch Application
 ```bash
 streamlit run app.py
 ```
-*Open your browser at `http://localhost:8501` to access the inspection system.*
+*Access the inspection dashboard at `http://localhost:8501`.*
 
 ---
 
-## Author & Project Information
+## Author & Contact
 
 **Janardhan Jillela**  
 Lead Developer & Author  
